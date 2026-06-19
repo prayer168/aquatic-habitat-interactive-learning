@@ -71,8 +71,32 @@
 .compare-toggle { display: flex; gap: 8px; margin: 14px 0; }
 .compare-stage[hidden] { display: none !important; }
 
+/* 水域分類卡片動畫 */
+@keyframes waveMove { from { transform: translateX(0); } to { transform: translateX(-56px); } }
+.wave-move { animation: waveMove 2.4s linear infinite; }
+
+@keyframes rippleRing { 0% { transform: scale(.35); opacity: .9; } 100% { transform: scale(1.5); opacity: 0; } }
+.rip-ring { transform-box: fill-box; transform-origin: center; animation: rippleRing 3.6s ease-out infinite; }
+
+@keyframes softSway { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+.rip-soft { animation: softSway 3s ease-in-out infinite; }
+
+.flow-current { stroke-dasharray: 10 8; animation: flowdash 0.9s linear infinite; }
+
+/* 圖形尺寸 */
+.type-figure { max-width: 240px; margin: 0 0 12px; }
+.plant-figure { max-width: 280px; margin: 0 auto 12px; }
+.plant-figure svg, .type-figure svg { width: 100%; height: auto; display: block; }
+
+/* 更多水生植物圖鑑 */
+.species-fig { max-width: 150px; margin: 0 auto 8px; }
+.species-fig svg { width: 100%; height: auto; display: block; }
+.species-card { text-align: center; }
+.species-card h3 { margin: 4px 0 6px; }
+
 /* 尊重減少動畫偏好 */
 @media (prefers-reduced-motion: reduce) {
-  .water-plant, .energy-arrow.flowing { animation: none !important; }
+  .water-plant, .energy-arrow.flowing,
+  .wave-move, .rip-ring, .rip-soft, .flow-current { animation: none !important; }
   html { scroll-behavior: auto; }
 }

@@ -7,100 +7,295 @@ function waterBand(y, h, color) {
   return `<rect x="0" y="${y}" width="400" height="${h}" fill="${color}"/>`;
 }
 
-/* ---------- 水生植物四類 SVG（與水面關係為辨識重點） ---------- */
-// 水面在 y=70；水底在 y=190
+/* ---------- 水域分類動畫 SVG（認識水域 know.html 四張卡片） ---------- */
+// 重點：鹹淡（淡水/海水）與流動（靜水/流水）。皆含動畫。
+const WATER_TYPE_SVG = {
+  fresh: `
+  <svg viewBox="0 0 220 120" role="img" aria-label="淡水水域：清澈、鹽分低，可飲用">
+    <rect x="0" y="0" width="220" height="120" fill="#eaf7ef"/>
+    <path d="M0 46 Q110 38 220 50 L220 120 L0 120 Z" fill="#bfe0a3"/>
+    <path d="M20 60 Q110 50 200 62 L192 104 Q110 114 28 102 Z" fill="#79cadd"/>
+    <g class="rip-soft" stroke="#e4f5f9" stroke-width="2.5" fill="none" opacity=".85" stroke-linecap="round">
+      <path d="M56 76 q14 -5 28 0"/><path d="M118 90 q14 -5 28 0"/>
+    </g>
+    <g transform="translate(92,84)">
+      <path d="M0 0 q14 -8 28 0 q-14 8 -28 0Z" fill="#f4a259"/>
+      <path d="M28 0 l8 -5 v10 Z" fill="#f4a259"/><circle cx="7" cy="-1" r="1.8" fill="#333"/>
+    </g>
+    <g stroke="#5a7d32" stroke-width="2.5"><line x1="26" y1="62" x2="22" y2="38"/><line x1="33" y1="64" x2="30" y2="44"/></g>
+    <ellipse cx="22" cy="36" rx="3" ry="7" fill="#8a6d3b"/>
+    <path d="M198 18 c7 9 7 16 0 21 c-7 -5 -7 -12 0 -21Z" fill="#5bb6cf"/>
+  </svg>`,
+
+  salt: `
+  <svg viewBox="0 0 220 120" role="img" aria-label="海水水域：含鹽分、面積廣大">
+    <rect x="0" y="0" width="220" height="120" fill="#cdeefb"/>
+    <circle cx="38" cy="28" r="14" fill="#ffe48a"/>
+    <rect x="0" y="54" width="220" height="66" fill="#2f86b0"/>
+    <rect x="0" y="54" width="220" height="22" fill="#3f97c0"/>
+    <g class="wave-move">
+      <path d="M-30 64 q14 -8 28 0 t28 0 t28 0 t28 0 t28 0 t28 0 t28 0 t28 0" stroke="#cdeaf2" stroke-width="3" fill="none"/>
+      <path d="M-30 84 q14 -8 28 0 t28 0 t28 0 t28 0 t28 0 t28 0 t28 0 t28 0" stroke="#9fd0e0" stroke-width="2" fill="none" opacity=".7"/>
+    </g>
+    <g fill="#ffffff" opacity=".92">
+      <path d="M150 30 l2.4 6 6 2.4 -6 2.4 -2.4 6 -2.4 -6 -6 -2.4 6 -2.4Z"/>
+      <path d="M182 46 l1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6 4 -1.6Z"/>
+    </g>
+    <text x="158" y="22" font-size="11" fill="#156b7a" font-weight="700">鹽分高</text>
+  </svg>`,
+
+  still: `
+  <svg viewBox="0 0 220 120" role="img" aria-label="靜水水域：水面平靜、幾乎不流動">
+    <rect x="0" y="0" width="220" height="120" fill="#eaf7ef"/>
+    <path d="M0 50 Q110 44 220 52 L220 120 L0 120 Z" fill="#bfe0a3"/>
+    <ellipse cx="110" cy="86" rx="98" ry="27" fill="#86cfe0"/>
+    <line x1="30" y1="80" x2="84" y2="80" stroke="#cdeef4" stroke-width="2.5" opacity=".7"/>
+    <ellipse class="rip-ring" cx="96" cy="90" rx="26" ry="8" fill="none" stroke="#dff1f7" stroke-width="2.5"/>
+    <path d="M150 86 a15 5 0 1 0 30 0 l-14 0 z" fill="#4caa5d"/>
+    <text x="110" y="34" text-anchor="middle" font-size="11" fill="#2a6b7a" font-weight="700">水面平靜</text>
+  </svg>`,
+
+  flow: `
+  <svg viewBox="0 0 220 120" role="img" aria-label="流水水域：水持續流動、帶來氧氣">
+    <rect x="0" y="0" width="220" height="120" fill="#eaf7ef"/>
+    <path d="M0 0 L0 120 L220 120 L220 0 Z" fill="#eaf7ef"/>
+    <path d="M0 34 Q110 28 220 40 L220 56 Q110 44 0 50 Z" fill="#bfe0a3"/>
+    <path d="M0 50 L220 56 L220 96 L0 86 Z" fill="#5bb6cf"/>
+    <path d="M0 86 Q110 96 220 96 L220 120 L0 120 Z" fill="#bfe0a3"/>
+    <g class="flow-current" stroke="#e4f5f9" stroke-width="3.5" fill="none" stroke-linecap="round">
+      <path d="M14 62 L120 70"/><path d="M44 56 L150 64"/><path d="M22 74 L128 82"/>
+    </g>
+    <g fill="#dff1f7"><path d="M150 62 l12 3.5 -12 3.5 4 -3.5Z"/><path d="M156 76 l12 3.5 -12 3.5 4 -3.5Z"/></g>
+    <ellipse cx="78" cy="74" rx="9" ry="5" fill="#9a8b6f"/>
+    <ellipse cx="170" cy="84" rx="7" ry="4" fill="#8a7c61"/>
+    <text x="44" y="30" font-size="11" fill="#156b7a" font-weight="700">水流方向 →</text>
+  </svg>`
+};
+
+export function getWaterTypeSVG(key) { return WATER_TYPE_SVG[key] || ""; }
+
+/* ---------- 水生植物四類 SVG（與水面關係為辨識重點，加大、寫實） ---------- */
+// viewBox 240×300：空氣 0–90、水 90–255、泥土 255–300，水面線 y=90
+function plantBands() {
+  return `
+    <rect x="0" y="0" width="240" height="90" fill="#e3f3f9"/>
+    <rect x="0" y="90" width="240" height="165" fill="#bfe3ec"/>
+    <rect x="0" y="180" width="240" height="75" fill="#abd6e4"/>
+    <rect x="0" y="255" width="240" height="45" fill="#caa472"/>
+    <line x1="0" y1="90" x2="240" y2="90" stroke="#8fcdd9" stroke-width="2.5"/>
+    <g fill="#b0884f"><circle cx="42" cy="278" r="3"/><circle cx="150" cy="285" r="3"/><circle cx="205" cy="272" r="2.5"/></g>`;
+}
+
 const PLANT_SVG = {
   emergent: `
-  <svg viewBox="0 0 200 220" role="img" aria-label="挺水植物：荷花，根在水底，莖葉挺出水面">
-    <rect x="0" y="0" width="200" height="70" fill="#dff1f7"/>
-    <rect x="0" y="70" width="200" height="120" fill="#bfe3ec"/>
-    <rect x="0" y="190" width="200" height="30" fill="#caa472"/>
-    <line x1="0" y1="70" x2="200" y2="70" stroke="#8fcdd9" stroke-width="2"/>
-    <!-- 根在水底 -->
-    <path d="M100 190 q-10 8 -22 12 M100 190 q10 8 22 12 M100 190 v14" stroke="#6b8f3a" stroke-width="2" fill="none"/>
-    <!-- 挺出水面的莖 -->
-    <line x1="100" y1="190" x2="100" y2="50" stroke="#3c8d4e" stroke-width="5"/>
-    <line x1="130" y1="190" x2="130" y2="80" stroke="#3c8d4e" stroke-width="4"/>
-    <!-- 挺立的荷葉（在空氣中） -->
-    <ellipse cx="130" cy="74" rx="26" ry="9" fill="#4caa5d"/>
-    <!-- 荷花 -->
-    <g transform="translate(100,46)">
-      <path d="M0 6 C-14 -6 -10 -22 0 -20 C10 -22 14 -6 0 6Z" fill="#f3a6c0"/>
-      <path d="M-12 4 C-22 -4 -18 -18 -8 -16 Z" fill="#f6bcd0"/>
-      <path d="M12 4 C22 -4 18 -18 8 -16 Z" fill="#f6bcd0"/>
-      <circle cx="0" cy="-6" r="4" fill="#f2d24a"/>
+  <svg viewBox="0 0 240 300" role="img" aria-label="挺水植物：荷花。根長在水底泥土，莖和葉挺出水面">
+    ${plantBands()}
+    <ellipse cx="120" cy="262" rx="15" ry="6" fill="#c9b083"/>
+    <path d="M120 262 q-28 8 -48 6 M120 262 q28 8 48 6 M120 262 v18" stroke="#7a5a2e" stroke-width="2.5" fill="none"/>
+    <path d="M120 262 C116 200 110 140 104 70" stroke="#3c8d4e" stroke-width="6" fill="none"/>
+    <path d="M120 262 C128 200 144 150 156 86" stroke="#3c8d4e" stroke-width="5" fill="none"/>
+    <!-- 荷葉：挺出水面、微凹、有放射葉脈 -->
+    <g class="water-plant" style="animation-delay:-1.4s">
+      <path d="M112 84 Q156 58 200 84 Q156 98 112 84 Z" fill="#4caa5d"/>
+      <path d="M112 84 Q156 70 200 84" fill="none" stroke="#3a8a4d" stroke-width="2"/>
+      <g stroke="#3a8a4d" stroke-width="1.2" opacity=".55">
+        <line x1="156" y1="90" x2="120" y2="84"/><line x1="156" y1="90" x2="140" y2="78"/>
+        <line x1="156" y1="90" x2="156" y2="74"/><line x1="156" y1="90" x2="172" y2="78"/><line x1="156" y1="90" x2="192" y2="84"/>
+      </g>
     </g>
-    <text x="100" y="212" text-anchor="middle" font-size="11" fill="#5a4427">水底泥土</text>
+    <!-- 荷花：層疊花瓣 + 蓮蓬 -->
+    <g class="water-plant">
+      <path d="M104 72 C84 52 86 26 104 18 C122 26 124 52 104 72Z" fill="#f3b6cd"/>
+      <path d="M104 70 C78 60 68 34 82 20 C100 26 104 48 104 70Z" fill="#f6c6d8"/>
+      <path d="M104 70 C130 60 140 34 126 20 C108 26 104 48 104 70Z" fill="#f6c6d8"/>
+      <path d="M104 72 C90 54 90 32 104 24 C118 32 118 54 104 72Z" fill="#f79ac0"/>
+      <path d="M104 70 C86 66 74 48 84 34 C98 38 104 54 104 70Z" fill="#fbd2e0"/>
+      <path d="M104 70 C122 66 134 48 124 34 C110 38 104 54 104 70Z" fill="#fbd2e0"/>
+      <ellipse cx="104" cy="48" rx="7" ry="6" fill="#f2d24a"/>
+      <circle cx="101" cy="47" r="1.2" fill="#c9a42a"/><circle cx="107" cy="48" r="1.2" fill="#c9a42a"/><circle cx="104" cy="44" r="1.2" fill="#c9a42a"/>
+    </g>
+    <text x="120" y="284" text-anchor="middle" font-size="12" fill="#5a4427">水底泥土</text>
   </svg>`,
 
   "floating-leaf": `
-  <svg viewBox="0 0 200 220" role="img" aria-label="浮葉植物：睡蓮，根在水底，葉片平貼水面">
-    <rect x="0" y="0" width="200" height="70" fill="#dff1f7"/>
-    <rect x="0" y="70" width="200" height="120" fill="#bfe3ec"/>
-    <rect x="0" y="190" width="200" height="30" fill="#caa472"/>
-    <line x1="0" y1="70" x2="200" y2="70" stroke="#8fcdd9" stroke-width="2"/>
-    <!-- 根固定水底 -->
-    <path d="M100 190 q-8 8 -16 12 M100 190 q8 8 16 12 M100 190 v14" stroke="#6b8f3a" stroke-width="2" fill="none"/>
+  <svg viewBox="0 0 240 300" role="img" aria-label="浮葉植物：睡蓮。根固定水底，葉片平貼漂浮在水面">
+    ${plantBands()}
+    <path d="M120 262 q-24 8 -42 6 M120 262 q24 8 42 6 M120 262 v16" stroke="#7a5a2e" stroke-width="2.5" fill="none"/>
     <!-- 細長葉柄連到水面 -->
-    <path d="M100 190 C96 150 84 110 70 72" stroke="#3c8d4e" stroke-width="3" fill="none"/>
-    <path d="M100 190 C108 150 124 110 132 72" stroke="#3c8d4e" stroke-width="3" fill="none"/>
-    <!-- 平貼水面的葉（含缺口） -->
-    <path d="M44 70 a26 8 0 1 0 52 0 l-24 0 z" fill="#4caa5d"/>
-    <path d="M108 70 a24 7 0 1 0 48 0 l-22 0 z" fill="#56b568"/>
-    <!-- 水面上的睡蓮花 -->
-    <g transform="translate(118,66)">
-      <path d="M0 2 C-8 -6 -6 -14 0 -13 C6 -14 8 -6 0 2Z" fill="#f6bcd0"/>
-      <circle cx="0" cy="-5" r="2.5" fill="#f2d24a"/>
+    <path d="M120 262 C108 200 84 140 70 96" stroke="#3c8d4e" stroke-width="3.5" fill="none"/>
+    <path d="M120 262 C132 200 158 140 168 96" stroke="#3c8d4e" stroke-width="3.5" fill="none"/>
+    <path d="M120 262 C126 210 156 150 200 94" stroke="#3c8d4e" stroke-width="3" fill="none"/>
+    <!-- 平貼水面的圓葉（有缺口、葉脈） -->
+    <path d="M30 90 a40 11 0 1 0 80 0 l-37 0 z" fill="#4caa5d"/>
+    <g stroke="#3a8a4d" stroke-width="1" opacity=".5"><line x1="70" y1="90" x2="36" y2="88"/><line x1="70" y1="90" x2="52" y2="98"/><line x1="70" y1="90" x2="92" y2="98"/><line x1="70" y1="90" x2="104" y2="88"/></g>
+    <path d="M118 90 a34 9 0 1 0 68 0 l-31 0 z" fill="#56b568"/>
+    <g stroke="#3a8a4d" stroke-width="1" opacity=".5"><line x1="152" y1="90" x2="124" y2="96"/><line x1="152" y1="90" x2="152" y2="98"/><line x1="152" y1="90" x2="180" y2="96"/></g>
+    <!-- 睡蓮花：低平、層疊，浮在水面 -->
+    <g class="water-plant" style="animation-delay:-1s">
+      <ellipse cx="200" cy="90" rx="20" ry="6" fill="#eaf3f5" opacity=".5"/>
+      <g fill="#fbd2e0">
+        <ellipse cx="184" cy="88" rx="9" ry="3.5" transform="rotate(-12 200 88)"/>
+        <ellipse cx="216" cy="88" rx="9" ry="3.5" transform="rotate(12 200 88)"/>
+        <ellipse cx="200" cy="84" rx="3.5" ry="9"/>
+      </g>
+      <g fill="#f79ac0">
+        <ellipse cx="192" cy="86" rx="7" ry="3" transform="rotate(-28 200 86)"/>
+        <ellipse cx="208" cy="86" rx="7" ry="3" transform="rotate(28 200 86)"/>
+      </g>
+      <ellipse cx="200" cy="86" rx="4" ry="3.5" fill="#f2d24a"/>
     </g>
-    <text x="100" y="212" text-anchor="middle" font-size="11" fill="#5a4427">水底泥土</text>
+    <text x="120" y="284" text-anchor="middle" font-size="12" fill="#5a4427">水底泥土</text>
   </svg>`,
 
   submerged: `
-  <svg viewBox="0 0 200 220" role="img" aria-label="沉水植物：水蘊草，整株沉在水面下，葉細長柔軟">
-    <rect x="0" y="0" width="200" height="70" fill="#dff1f7"/>
-    <rect x="0" y="70" width="200" height="120" fill="#bfe3ec"/>
-    <rect x="0" y="190" width="200" height="30" fill="#caa472"/>
-    <line x1="0" y1="70" x2="200" y2="70" stroke="#8fcdd9" stroke-width="2"/>
-    <!-- 根在水底 -->
-    <path d="M100 190 q-8 6 -14 10 M100 190 q8 6 14 10" stroke="#6b8f3a" stroke-width="2" fill="none"/>
-    <!-- 整株都在水面下，細長柔軟 -->
+  <svg viewBox="0 0 240 300" role="img" aria-label="沉水植物：水蘊草。整株沉在水面下，葉細長柔軟">
+    ${plantBands()}
+    <path d="M120 262 q-18 8 -30 6 M120 262 q18 8 30 6 M120 262 v14" stroke="#7a5a2e" stroke-width="2" fill="none"/>
+    <!-- 整株沉水、輪生細葉，隨水搖曳 -->
     <g class="water-plant">
-      <path d="M100 190 C92 160 108 140 100 110 C94 92 104 86 100 78" stroke="#3c8d4e" stroke-width="3" fill="none"/>
-      <path d="M78 190 C72 162 84 142 78 116 C74 100 82 94 80 86" stroke="#3c8d4e" stroke-width="3" fill="none"/>
-      <path d="M122 190 C128 160 116 142 122 116 C126 102 120 96 122 90" stroke="#3c8d4e" stroke-width="3" fill="none"/>
-      <!-- 細長葉 -->
-      <g stroke="#5cb56b" stroke-width="2">
-        <line x1="100" y1="120" x2="90" y2="112"/><line x1="100" y1="120" x2="110" y2="112"/>
-        <line x1="78" y1="130" x2="68" y2="124"/><line x1="78" y1="130" x2="88" y2="124"/>
-        <line x1="122" y1="130" x2="132" y2="124"/><line x1="122" y1="130" x2="112" y2="124"/>
+      <g stroke="#3c8d4e" stroke-width="3.5" fill="none">
+        <path d="M96 258 C88 214 102 176 96 132 C93 116 99 112 97 106"/>
+        <path d="M120 258 C126 212 114 176 120 132 C123 116 117 112 120 104"/>
+        <path d="M146 258 C152 216 140 184 146 144 C149 130 144 126 146 120"/>
+      </g>
+      <g stroke="#62ba70" stroke-width="2" stroke-linecap="round">
+        <path d="M96 230 l-12 -6 M96 230 l12 -6 M96 210 l-13 -5 M96 210 l13 -5 M96 190 l-12 -6 M96 190 l12 -6 M96 168 l-12 -6 M96 168 l12 -6 M96 146 l-11 -6 M96 146 l11 -6 M97 124 l-10 -5 M97 124 l10 -5"/>
+        <path d="M120 226 l-12 -6 M120 226 l12 -6 M120 206 l-13 -5 M120 206 l13 -5 M120 186 l-12 -6 M120 186 l12 -6 M120 164 l-12 -6 M120 164 l12 -6 M120 142 l-11 -6 M120 142 l11 -6 M120 122 l-10 -5 M120 122 l10 -5"/>
+        <path d="M146 232 l-11 -6 M146 232 l11 -6 M146 212 l-12 -5 M146 212 l12 -5 M146 192 l-11 -6 M146 192 l11 -6 M146 170 l-11 -6 M146 170 l11 -6 M146 150 l-10 -6 M146 150 l10 -6 M146 134 l-9 -5 M146 134 l9 -5"/>
       </g>
     </g>
-    <text x="100" y="212" text-anchor="middle" font-size="11" fill="#5a4427">水底泥土</text>
+    <text x="120" y="284" text-anchor="middle" font-size="12" fill="#5a4427">水底泥土</text>
   </svg>`,
 
   "free-floating": `
-  <svg viewBox="0 0 200 220" role="img" aria-label="漂浮植物：浮萍，根懸在水中沒有固定，整株隨水漂流">
-    <rect x="0" y="0" width="200" height="70" fill="#dff1f7"/>
-    <rect x="0" y="70" width="200" height="120" fill="#bfe3ec"/>
-    <rect x="0" y="190" width="200" height="30" fill="#caa472"/>
-    <line x1="0" y1="70" x2="200" y2="70" stroke="#8fcdd9" stroke-width="2"/>
-    <!-- 浮在水面的小葉群，根懸在水中 -->
+  <svg viewBox="0 0 240 300" role="img" aria-label="漂浮植物：浮萍。根懸在水中沒有固定，整株隨水漂流">
+    ${plantBands()}
+    <!-- 三叢浮萍，葉群浮在水面、細根懸在水中 -->
     <g class="water-plant">
-      <ellipse cx="70" cy="68" rx="14" ry="6" fill="#56b568"/>
-      <ellipse cx="70" cy="68" rx="14" ry="6" fill="none"/>
-      <path d="M64 72 v18 M70 72 v22 M76 72 v18" stroke="#7bbf7f" stroke-width="1.5"/>
+      <ellipse cx="62" cy="88" rx="13" ry="6" fill="#56b568"/><ellipse cx="79" cy="90" rx="11" ry="5" fill="#4caa5d"/><ellipse cx="70" cy="83" rx="9" ry="4.5" fill="#62ba70"/>
+      <g stroke="#a7d8b0" stroke-width="1.4"><line x1="60" y1="93" x2="58" y2="122"/><line x1="70" y1="94" x2="69" y2="128"/><line x1="79" y1="94" x2="81" y2="120"/></g>
     </g>
-    <g class="water-plant" style="animation-delay:-2s">
-      <ellipse cx="120" cy="66" rx="16" ry="6.5" fill="#4caa5d"/>
-      <path d="M113 70 v20 M120 70 v24 M127 70 v20" stroke="#7bbf7f" stroke-width="1.5"/>
+    <g class="water-plant" style="animation-delay:-1.6s">
+      <ellipse cx="128" cy="86" rx="14" ry="6" fill="#4caa5d"/><ellipse cx="146" cy="88" rx="11" ry="5" fill="#56b568"/><ellipse cx="137" cy="82" rx="9" ry="4.5" fill="#62ba70"/>
+      <g stroke="#a7d8b0" stroke-width="1.4"><line x1="126" y1="91" x2="124" y2="124"/><line x1="137" y1="92" x2="136" y2="130"/><line x1="146" y1="92" x2="148" y2="122"/></g>
     </g>
-    <ellipse cx="150" cy="70" rx="9" ry="4" fill="#56b568"/>
-    <text x="100" y="120" text-anchor="middle" font-size="11" fill="#2a6b7a">根懸在水中，沒有固定</text>
-    <text x="100" y="212" text-anchor="middle" font-size="11" fill="#5a4427">水底泥土（根未接觸）</text>
+    <g class="water-plant" style="animation-delay:-0.8s">
+      <ellipse cx="194" cy="90" rx="12" ry="5.5" fill="#56b568"/><ellipse cx="180" cy="88" rx="9" ry="4.5" fill="#62ba70"/>
+      <g stroke="#a7d8b0" stroke-width="1.4"><line x1="192" y1="94" x2="191" y2="120"/><line x1="180" y1="92" x2="179" y2="116"/></g>
+    </g>
+    <text x="120" y="166" text-anchor="middle" font-size="12" fill="#2a6b7a">根懸在水中，沒有固定</text>
+    <text x="120" y="284" text-anchor="middle" font-size="12" fill="#5a4427">水底泥土（根未接觸）</text>
   </svg>`
 };
 
 export function getPlantSVG(key) { return PLANT_SVG[key] || ""; }
+
+/* ---------- 更多常見水生植物（圖鑑小圖，viewBox 120×140） ---------- */
+function speciesBands() {
+  return `
+    <rect x="0" y="0" width="120" height="58" fill="#e3f3f9"/>
+    <rect x="0" y="58" width="120" height="62" fill="#bfe3ec"/>
+    <rect x="0" y="120" width="120" height="20" fill="#caa472"/>
+    <line x1="0" y1="58" x2="120" y2="58" stroke="#8fcdd9" stroke-width="2"/>`;
+}
+
+const SPECIES_SVG = {
+  // 挺水：香蒲（葉劍形挺立、棕色蠟燭狀花穗）
+  cattail: `
+  <svg viewBox="0 0 120 140" role="img" aria-label="香蒲：挺水植物，花穗像棕色蠟燭">
+    ${speciesBands()}
+    <path d="M60 118 q-14 8 -22 12 M60 118 q14 8 22 12 M60 118 v14" stroke="#7a5a2e" stroke-width="2" fill="none"/>
+    <g class="water-plant">
+      <path d="M52 118 C44 80 40 50 42 18" stroke="#4c9a52" stroke-width="4" fill="none"/>
+      <path d="M70 118 C78 78 82 48 80 16" stroke="#57b05c" stroke-width="4" fill="none"/>
+      <line x1="60" y1="118" x2="60" y2="34" stroke="#3c8d4e" stroke-width="4"/>
+      <rect x="55" y="24" width="10" height="26" rx="5" fill="#8a5a2b"/>
+      <line x1="60" y1="24" x2="60" y2="12" stroke="#3c8d4e" stroke-width="2.5"/>
+    </g>
+    <text x="60" y="134" text-anchor="middle" font-size="9" fill="#5a4427">挺水</text>
+  </svg>`,
+
+  // 挺水：水稻（細葉、低垂稻穗，長在水田）
+  rice: `
+  <svg viewBox="0 0 120 140" role="img" aria-label="水稻：挺水植物，結稻穗，種在水田">
+    ${speciesBands()}
+    <path d="M60 118 q-12 8 -20 12 M60 118 q12 8 20 12 M60 118 v14" stroke="#7a5a2e" stroke-width="2" fill="none"/>
+    <g class="water-plant">
+      <line x1="60" y1="118" x2="58" y2="40" stroke="#7aa83f" stroke-width="3.5"/>
+      <path d="M58 80 C44 74 38 64 36 54" stroke="#8cbf52" stroke-width="3" fill="none"/>
+      <path d="M58 70 C72 64 80 56 84 48" stroke="#8cbf52" stroke-width="3" fill="none"/>
+      <path d="M58 40 C58 30 66 26 70 22" stroke="#c9a64b" stroke-width="2.5" fill="none"/>
+      <g fill="#d8b85a"><ellipse cx="62" cy="34" rx="2.6" ry="4.5"/><ellipse cx="66" cy="29" rx="2.6" ry="4.5"/><ellipse cx="70" cy="24" rx="2.6" ry="4.5"/><ellipse cx="56" cy="38" rx="2.6" ry="4.5"/></g>
+    </g>
+    <text x="60" y="134" text-anchor="middle" font-size="9" fill="#5a4427">挺水</text>
+  </svg>`,
+
+  // 浮葉：菱角（菱形葉成叢浮水面，水下有角果）
+  caltrop: `
+  <svg viewBox="0 0 120 140" role="img" aria-label="菱角：浮葉植物，菱形葉成叢浮在水面，果實有角">
+    ${speciesBands()}
+    <path d="M60 118 q-10 6 -18 10 M60 118 q10 6 18 10" stroke="#7a5a2e" stroke-width="2" fill="none"/>
+    <path d="M60 118 C58 96 56 76 58 60" stroke="#3c8d4e" stroke-width="2.5" fill="none"/>
+    <!-- 浮在水面的菱形葉蓮座 -->
+    <g fill="#4caa5d" stroke="#3a8a4d" stroke-width="1">
+      <path d="M60 54 l8 -6 8 6 -8 6 z"/><path d="M60 54 l-8 -6 -8 6 8 6 z"/>
+      <path d="M60 50 l6 -7 7 4 -5 7 z"/><path d="M60 50 l-6 -7 -7 4 5 7 z"/>
+      <path d="M60 58 l7 5 -3 8 -8 -5 z"/><path d="M60 58 l-7 5 3 8 8 -5 z"/>
+    </g>
+    <!-- 水下角果 -->
+    <path d="M60 80 l6 6 -6 4 -6 -4 z" fill="#5a4427"/>
+    <text x="60" y="134" text-anchor="middle" font-size="9" fill="#5a4427">浮葉</text>
+  </svg>`,
+
+  // 沉水：金魚藻（羽狀輪生細葉，整株沉水）
+  hornwort: `
+  <svg viewBox="0 0 120 140" role="img" aria-label="金魚藻：沉水植物，葉細裂像羽毛">
+    ${speciesBands()}
+    <g class="water-plant">
+      <path d="M60 120 C56 96 64 80 60 64" stroke="#3c8d4e" stroke-width="3" fill="none"/>
+      <g stroke="#57b05c" stroke-width="1.6" stroke-linecap="round">
+        <path d="M60 108 q-10 -2 -16 -8 M60 108 q10 -2 16 -8"/>
+        <path d="M60 96 q-11 -2 -17 -9 M60 96 q11 -2 17 -9"/>
+        <path d="M60 84 q-10 -2 -16 -8 M60 84 q10 -2 16 -8"/>
+        <path d="M60 72 q-9 -2 -14 -8 M60 72 q9 -2 14 -8"/>
+      </g>
+    </g>
+    <text x="60" y="134" text-anchor="middle" font-size="9" fill="#5a4427">沉水</text>
+  </svg>`,
+
+  // 漂浮：布袋蓮（葉柄膨大充氣浮水，紫花，外來種）
+  hyacinth: `
+  <svg viewBox="0 0 120 140" role="img" aria-label="布袋蓮：漂浮植物，葉柄膨大充氣，開紫花">
+    ${speciesBands()}
+    <g class="water-plant">
+      <ellipse cx="48" cy="60" rx="9" ry="13" fill="#7bbf7f"/>
+      <ellipse cx="72" cy="60" rx="9" ry="13" fill="#6bb46f"/>
+      <ellipse cx="48" cy="44" rx="11" ry="8" fill="#4caa5d"/>
+      <ellipse cx="72" cy="44" rx="11" ry="8" fill="#57b05c"/>
+      <line x1="60" y1="50" x2="60" y2="24" stroke="#5a8a3f" stroke-width="2.5"/>
+      <g fill="#9b7fd4"><circle cx="60" cy="22" r="4"/><circle cx="54" cy="26" r="3.5"/><circle cx="66" cy="26" r="3.5"/></g>
+      <g stroke="#a7d8b0" stroke-width="1.3"><line x1="56" y1="72" x2="54" y2="100"/><line x1="64" y1="72" x2="66" y2="104"/><line x1="60" y1="74" x2="60" y2="110"/></g>
+    </g>
+    <text x="60" y="134" text-anchor="middle" font-size="9" fill="#5a4427">漂浮</text>
+  </svg>`,
+
+  // 漂浮：大萍（葉成蓮座狀漂浮，像小白菜）
+  waterlettuce: `
+  <svg viewBox="0 0 120 140" role="img" aria-label="大萍：漂浮植物，葉成蓮座狀漂浮如小白菜">
+    ${speciesBands()}
+    <g class="water-plant">
+      <g fill="#7bbf7f" stroke="#5a9a52" stroke-width="1">
+        <ellipse cx="44" cy="50" rx="11" ry="15"/><ellipse cx="76" cy="50" rx="11" ry="15"/>
+        <ellipse cx="60" cy="44" rx="11" ry="16"/>
+        <ellipse cx="52" cy="54" rx="9" ry="13" fill="#8fce8f"/><ellipse cx="68" cy="54" rx="9" ry="13" fill="#8fce8f"/>
+      </g>
+      <g stroke="#a7d8b0" stroke-width="1.3"><line x1="56" y1="64" x2="54" y2="98"/><line x1="64" y1="64" x2="66" y2="102"/><line x1="60" y1="66" x2="60" y2="108"/></g>
+    </g>
+    <text x="60" y="134" text-anchor="middle" font-size="9" fill="#5a4427">漂浮</text>
+  </svg>`
+};
+
+export function getSpeciesSVG(key) { return SPECIES_SVG[key] || ""; }
 
 /* ---------- 點擊探索：水域地圖（know.html） ---------- */
 // 連貫地景：山上溪流注入海洋，岸邊有池塘與湖泊，右側為沙灘與海。

@@ -2,7 +2,8 @@
 import { initChrome } from "./chrome.js";
 import { loadProgress, getPercent, LEARN_PAGES } from "./progress.js";
 import {
-  getPlantSVG, buildWaterMap, WATER_MAP_INFO,
+  getPlantSVG, getWaterTypeSVG, getSpeciesSVG,
+  buildWaterMap, WATER_MAP_INFO,
   buildFoodChainLayers, showFoodChainStage,
   buildCompareSVG, showCompareState, enableDragMatch
 } from "./interactions.js";
@@ -40,6 +41,7 @@ function renderKnow(data) {
   $("#know-sections").innerHTML = k.sections.map((sec) => `
     <div class="card">
       <span class="section-flag">${sec.name}</span>
+      <div class="stage-svg-wrap type-figure">${getWaterTypeSVG(sec.key)}</div>
       <p>${sec.desc}</p>
       <div>${sec.examples.map((e) => `<span class="tag">${e}</span>`).join("")}</div>
     </div>`).join("");
@@ -73,7 +75,7 @@ function renderPlants(data) {
   $("#plants-lead").textContent = pl.lead;
   $("#plants-types").innerHTML = pl.types.map((t) => `
     <div class="card">
-      <div class="stage-svg-wrap" style="max-width:200px">${getPlantSVG(t.key)}</div>
+      <div class="stage-svg-wrap plant-figure">${getPlantSVG(t.key)}</div>
       <span class="section-flag">${t.name}</span>
       <p><strong>特徵：</strong>${t.feature}</p>
       <p>${t.desc}</p>
@@ -81,22 +83,38 @@ function renderPlants(data) {
     </div>`).join("");
   $("#plants-role").textContent = pl.role;
 
+  // 更多常見水生植物圖鑑
+  if (pl.gallery && $("#plants-gallery")) {
+    $("#gallery-lead").textContent = pl.galleryLead || "";
+    $("#plants-gallery").innerHTML = pl.gallery.map((g) => `
+      <div class="card species-card">
+        <div class="species-fig">${getSpeciesSVG(g.svg)}</div>
+        <h3>${g.name}</h3>
+        <span class="tag">${g.type}</span>
+        <p>${g.desc}</p>
+      </div>`).join("");
+  }
+
   // 拖曳配對：把例子放到正確類別
   buildPlantMatch(pl);
 }
 
 const MATCH_ITEMS = [
   { name: "荷花", key: "emergent" },
+  { name: "香蒲", key: "emergent" },
   { name: "睡蓮", key: "floating-leaf" },
+  { name: "菱角", key: "floating-leaf" },
   { name: "水蘊草", key: "submerged" },
-  { name: "浮萍", key: "free-floating" }
+  { name: "金魚藻", key: "submerged" },
+  { name: "浮萍", key: "free-floating" },
+  { name: "布袋蓮", key: "free-floating" }
 ];
 
 function buildPlantMatch(pl) {
   const pool = $("#match-pool");
   const zones = $("#match-zones");
   // 打散（用固定洗牌避免 Math.random）
-  const order = [2, 0, 3, 1];
+  const order = [4, 0, 7, 2, 5, 1, 6, 3];
   pool.innerHTML = order.map((i) => {
     const it = MATCH_ITEMS[i];
     return `<button type="button" class="drag-item" data-key="${it.key}">${it.name}</button>`;
