@@ -2,7 +2,7 @@
 import { initChrome } from "./chrome.js";
 import { loadProgress, getPercent, LEARN_PAGES } from "./progress.js";
 import {
-  getPlantSVG, getWaterTypeSVG, getSpeciesSVG,
+  getPlantSVG, getWaterTypeSVG, getSpeciesSVG, getAdaptSVG,
   buildWaterMap, WATER_MAP_INFO,
   buildFoodChainLayers, showFoodChainStage,
   buildCompareSVG, showCompareState, enableDragMatch
@@ -157,7 +157,10 @@ function renderAnimals(data) {
   const a = data.animals;
   $("#animals-lead").textContent = a.lead;
   $("#animals-adapt").innerHTML = a.adaptations.map((ad) => `
-    <div class="card"><span class="section-flag">${ad.part}</span><p>${ad.desc}</p></div>`).join("");
+    <div class="card">
+      <div class="stage-svg-wrap adapt-figure">${getAdaptSVG(ad.svg)}</div>
+      <span class="section-flag">${ad.part}</span><p>${ad.desc}</p>
+    </div>`).join("");
 
   const fc = a.foodchain;
   $("#fc-title").textContent = fc.title;
@@ -183,6 +186,18 @@ function renderAnimals(data) {
     caption.textContent = s.text;
   }
   steps.forEach((st) => st.addEventListener("click", () => { stop(); go(+st.dataset.idx); }));
+
+  // 點選圖中的生物也能跳到該營養階（更直接的互動）
+  const stageIdx = (key) => fc.stages.findIndex((s) => s.key === key);
+  svgRoot.addEventListener("click", (e) => {
+    const g = e.target.closest("[data-jump]");
+    if (g) { stop(); go(stageIdx(g.dataset.jump)); }
+  });
+  svgRoot.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const g = e.target.closest("[data-jump]");
+    if (g) { e.preventDefault(); stop(); go(stageIdx(g.dataset.jump)); }
+  });
 
   function play() {
     stop();
