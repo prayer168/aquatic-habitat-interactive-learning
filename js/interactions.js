@@ -103,32 +103,100 @@ const PLANT_SVG = {
 export function getPlantSVG(key) { return PLANT_SVG[key] || ""; }
 
 /* ---------- 點擊探索：水域地圖（know.html） ---------- */
+// 連貫地景：山上溪流注入海洋，岸邊有池塘與湖泊，右側為沙灘與海。
+function mapLabel(x, y, text, dark) {
+  const w = text.length * 15 + 14, h = 22;
+  const fill = dark ? "#0d4d5c" : "#fff";
+  const bg = dark ? "rgba(255,255,255,.82)" : "rgba(13,77,92,.55)";
+  return `<g>
+    <rect x="${x - w / 2}" y="${y - h + 5}" width="${w}" height="${h}" rx="11" fill="${bg}"/>
+    <text x="${x}" y="${y}" text-anchor="middle" font-size="14" font-weight="700" fill="${fill}">${text}</text>
+  </g>`;
+}
+
 export function buildWaterMap() {
   return `
-  <svg viewBox="0 0 400 240" role="img" aria-label="水域地圖：可點選溪流、池塘、湖泊與海洋">
-    <rect x="0" y="0" width="400" height="240" fill="#eaf6f3"/>
-    <!-- 山與陸地 -->
-    <path d="M0 0 L0 120 L120 60 L210 110 L300 50 L400 100 L400 0 Z" fill="#cfe3c4"/>
-    <!-- 溪流（流水/淡水） -->
-    <g class="hotspot" data-spot="flow" tabindex="0" role="button" aria-label="溪流">
-      <path d="M150 0 C160 40 130 70 150 110 C170 150 140 180 160 240" stroke="#6ec6d8" stroke-width="14" fill="none" stroke-linecap="round"/>
-      <text x="118" y="40" font-size="13" fill="#156b7a" font-weight="700">溪流</text>
-    </g>
-    <!-- 池塘（靜水/淡水） -->
-    <g class="hotspot" data-spot="pond" tabindex="0" role="button" aria-label="池塘">
-      <ellipse cx="70" cy="180" rx="48" ry="30" fill="#7fcfe0"/>
-      <text x="70" y="184" text-anchor="middle" font-size="13" fill="#0d4d5c" font-weight="700">池塘</text>
-    </g>
-    <!-- 湖泊（靜水/淡水） -->
-    <g class="hotspot" data-spot="lake" tabindex="0" role="button" aria-label="湖泊">
-      <ellipse cx="250" cy="170" rx="40" ry="26" fill="#69bdd0"/>
-      <text x="250" y="174" text-anchor="middle" font-size="13" fill="#0d4d5c" font-weight="700">湖泊</text>
-    </g>
-    <!-- 海洋（海水/流水） -->
+  <svg viewBox="0 0 400 250" role="img" aria-label="水域地景：可點選溪流、池塘、湖泊與海洋">
+    <defs>
+      <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#cdeefb"/><stop offset="1" stop-color="#eaf7ef"/>
+      </linearGradient>
+      <linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#46a4c8"/><stop offset="1" stop-color="#216f97"/>
+      </linearGradient>
+      <linearGradient id="riverG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#8fd3e3"/><stop offset="1" stop-color="#5bb6cf"/>
+      </linearGradient>
+    </defs>
+
+    <!-- 天空 -->
+    <rect x="0" y="0" width="400" height="250" fill="url(#skyG)"/>
+    <circle cx="56" cy="40" r="17" fill="#ffe48a"/>
+    <ellipse cx="300" cy="34" rx="26" ry="9" fill="#ffffff" opacity=".75"/>
+    <ellipse cx="320" cy="40" rx="20" ry="8" fill="#ffffff" opacity=".7"/>
+
+    <!-- 遠山 -->
+    <path d="M0 110 L70 46 L150 110 Z" fill="#a7cb96"/>
+    <path d="M110 110 L195 34 L285 110 Z" fill="#8fbb7e"/>
+    <path d="M195 56 L210 46 L225 56 L218 64 L202 64 Z" fill="#ffffff" opacity=".85"/>
+
+    <!-- 草地 -->
+    <path d="M0 96 Q120 84 250 92 Q330 96 400 104 L400 250 L0 250 Z" fill="#bfe0a3"/>
+    <path d="M0 150 Q200 140 400 156 L400 250 L0 250 Z" fill="#aed592"/>
+
+    <!-- 沙灘 -->
+    <path d="M300 96 C322 140 300 190 322 250 L400 250 L400 96 Z" fill="#f0dca6"/>
+
+    <!-- 海洋（海水 / 流水） -->
     <g class="hotspot" data-spot="sea" tabindex="0" role="button" aria-label="海洋">
-      <rect x="320" y="120" width="80" height="120" fill="#2f86b0"/>
-      <path d="M320 132 q10 -6 20 0 t20 0 t20 0 t20 0" stroke="#bfe3ec" stroke-width="2" fill="none"/>
-      <text x="360" y="180" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">海洋</text>
+      <path d="M332 96 C352 140 330 190 352 250 L400 250 L400 96 Z" fill="url(#seaG)"/>
+      <g stroke="#dff1f7" stroke-width="2" fill="none" opacity=".8">
+        <path d="M350 120 q12 -6 24 0 t24 0"/>
+        <path d="M348 150 q12 -6 24 0 t24 0"/>
+        <path d="M350 182 q12 -6 24 0 t24 0"/>
+        <path d="M352 214 q12 -6 24 0 t24 0"/>
+      </g>
+      ${mapLabel(368, 110, "海洋", false)}
+    </g>
+
+    <!-- 溪流（淡水 / 流水）：自山谷流下注入海洋 -->
+    <g class="hotspot" data-spot="flow" tabindex="0" role="button" aria-label="溪流">
+      <path d="M205 60
+               C196 92 214 110 206 134
+               C198 160 226 176 236 196
+               C246 214 300 210 338 206
+               L342 224
+               C300 228 250 232 226 210
+               C206 192 214 168 224 146
+               C232 124 214 104 222 78
+               C224 70 226 66 224 60 Z"
+            fill="url(#riverG)"/>
+      <!-- 水花石頭 -->
+      <ellipse cx="214" cy="120" rx="5" ry="3" fill="#cfeaf0"/>
+      <ellipse cx="232" cy="172" rx="6" ry="3" fill="#cfeaf0"/>
+      ${mapLabel(168, 120, "溪流", true)}
+    </g>
+
+    <!-- 湖泊（淡水 / 靜水）：草地上較大的靜止水域 -->
+    <g class="hotspot" data-spot="lake" tabindex="0" role="button" aria-label="湖泊">
+      <ellipse cx="150" cy="150" rx="62" ry="34" fill="#74c4d8"/>
+      <ellipse cx="150" cy="150" rx="62" ry="34" fill="none" stroke="#9bd6e4" stroke-width="3" opacity=".7"/>
+      <path d="M120 150 q10 -4 20 0 t20 0" stroke="#dff1f7" stroke-width="2" fill="none" opacity=".8"/>
+      ${mapLabel(150, 155, "湖泊", true)}
+    </g>
+
+    <!-- 池塘（淡水 / 靜水）：左下角小水塘，有荷葉與蘆葦 -->
+    <g class="hotspot" data-spot="pond" tabindex="0" role="button" aria-label="池塘">
+      <ellipse cx="64" cy="214" rx="56" ry="30" fill="#86cfe0"/>
+      <ellipse cx="64" cy="214" rx="56" ry="30" fill="none" stroke="#a7dde9" stroke-width="3" opacity=".7"/>
+      <!-- 荷葉 -->
+      <path d="M34 210 a11 4 0 1 0 22 0 l-10 0 z" fill="#5cb56b"/>
+      <ellipse cx="84" cy="206" rx="10" ry="4" fill="#4caa5d"/>
+      <!-- 蘆葦 -->
+      <line x1="18" y1="214" x2="16" y2="190" stroke="#6b8f3a" stroke-width="2"/>
+      <ellipse cx="16" cy="188" rx="2.5" ry="6" fill="#8a6d3b"/>
+      <line x1="24" y1="216" x2="23" y2="196" stroke="#6b8f3a" stroke-width="2"/>
+      ${mapLabel(70, 219, "池塘", true)}
     </g>
   </svg>`;
 }
