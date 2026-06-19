@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>水生動物 · 水域環境探索趣</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="animals">
+  <header data-chrome="header"></header>
+  <main>
+    <div class="container">
+      <h1 class="page-title">🐟 水生動物</h1>
+      <p class="page-lead" id="animals-lead"></p>
+
+      <h2 class="page-title" style="font-size:1.25rem">水生動物的特殊構造</h2>
+      <div class="grid grid-2" id="animals-adapt"></div>
+
+      <div class="card">
+        <span class="section-flag">動畫模擬</span>
+        <h2 id="fc-title"></h2>
+        <p class="muted" id="fc-intro"></p>
+
+        <div class="stage-svg-wrap" id="fc-svg"></div>
+
+        <div class="stage-flow" id="fc-flow" role="group" aria-label="食物鏈階段"></div>
+        <div class="stage-caption" id="fc-caption" aria-live="polite"></div>
+
+        <div class="anim-controls">
+          <button type="button" class="btn" id="fc-play">▶ 播放</button>
+          <button type="button" class="btn secondary" id="fc-pause">⏸ 暫停</button>
+          <button type="button" class="btn secondary" id="fc-prev">◀ 上一步</button>
+          <button type="button" class="btn secondary" id="fc-next">下一步 ▶</button>
+          <button type="button" class="btn accent" id="fc-reset">🔄 重播</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>💡 想一想</h2>
+        <p class="muted">思考問題：如果池塘裡的小魚都被釣光了，大魚和水鳥會發生什麼事？</p>
+      </div>
+
+      <nav data-chrome="pager"></nav>
+    </div>
+  </main>
+  <footer data-chrome="footer"></footer>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

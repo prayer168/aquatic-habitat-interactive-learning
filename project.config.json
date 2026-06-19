@@ -1,0 +1,28 @@
+{
+  "name": "水域環境探索趣",
+  "projectName": "aquatic-habitat-interactive-learning",
+  "repository": "aquatic-habitat-interactive-learning",
+  "version": "0.1.0",
+  "level": "國小",
+  "grade": "五至六年級",
+  "subject": "自然科學",
+  "duration": "40分鐘",
+  "mode": "引導模式",
+  "style": "清爽自然風",
+  "audio": false,
+  "progressTracking": true,
+  "teacherGuide": true,
+  "quizCount": 10,
+  "applications": 6,
+  "resourceCount": 8,
+  "pages": [
+    { "id": "home", "file": "index.html", "title": "學習任務" },
+    { "id": "know", "file": "know.html", "title": "認識水域環境" },
+    { "id": "plants", "file": "plants.html", "title": "水生植物" },
+    { "id": "animals", "file": "animals.html", "title": "水生動物" },
+    { "id": "cherish", "file": "cherish.html", "title": "珍惜水域環境" },
+    { "id": "quiz", "file": "quiz.html", "title": "闖關大挑戰" },
+    { "id": "resources", "file": "resources.html", "title": "自主學習" }
+  ],
+  "createdAt": "2026-06-19"
+}

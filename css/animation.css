@@ -1,0 +1,78 @@
+/* ===== 動畫與互動專用樣式 ===== */
+
+/* SVG 圖層切換：務必用 attribute [hidden] 控制，並強制 display:none */
+.stage-layer[hidden] { display: none !important; }
+.layer[hidden] { display: none !important; }
+
+/* 水面波紋輕微擺動 */
+@keyframes sway {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+.water-plant { transform-origin: bottom center; animation: sway 4s ease-in-out infinite; }
+
+@keyframes swim {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(0); }
+}
+
+/* 食物鏈能量箭頭流動 */
+@keyframes flowdash { to { stroke-dashoffset: -24; } }
+.energy-arrow.flowing { stroke-dasharray: 8 6; animation: flowdash 1s linear infinite; }
+
+/* 階段流程列 */
+.stage-flow { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; margin: 16px 0; }
+.stage-step {
+  flex: 1; min-width: 120px; border: 2px solid var(--c-line); background: #fff;
+  border-radius: 10px; padding: 10px 8px; cursor: pointer; text-align: center;
+  font-weight: 600; color: var(--c-muted); transition: all .2s; font-family: inherit; font-size: .95rem;
+}
+.stage-step:hover { border-color: var(--c-accent); }
+.stage-step.active { border-color: var(--c-primary); background: #e9f6f8; color: var(--c-primary-dark); box-shadow: var(--shadow); }
+.stage-step .role { display: block; font-size: .78rem; font-weight: 500; opacity: .85; }
+.stage-arrow { align-self: center; color: var(--c-accent); font-size: 1.4rem; padding: 0 4px; }
+.stage-step:focus-visible { outline: 3px solid var(--c-accent-2); outline-offset: 2px; }
+
+.stage-caption {
+  background: #eef6f8; border-left: 5px solid var(--c-primary); border-radius: 8px;
+  padding: 12px 16px; margin-top: 12px; min-height: 64px; font-size: 1.05rem;
+}
+
+.anim-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+
+.stage-svg-wrap { background: linear-gradient(180deg,#dff1f5,#bfe3ec); border-radius: 12px; padding: 8px; }
+
+/* 拖曳配對 */
+.drag-area { display: grid; gap: 16px; }
+.drag-pool { display: flex; flex-wrap: wrap; gap: 10px; padding: 12px; background: #eef6f8; border-radius: 10px; min-height: 60px; }
+.drag-item {
+  background: #fff; border: 2px solid var(--c-accent); border-radius: 10px;
+  padding: 8px 14px; cursor: grab; font-weight: 600; user-select: none; touch-action: none;
+}
+.drag-item.dragging { opacity: .5; }
+.drag-item.placed { border-color: var(--c-line); color: var(--c-muted); }
+.drop-zones { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+.drop-zone {
+  border: 2px dashed var(--c-primary); border-radius: 12px; padding: 12px; background: #fff; min-height: 110px;
+}
+.drop-zone h4 { margin: 0 0 8px; color: var(--c-primary-dark); }
+.drop-zone.over { background: #e9f6f8; border-style: solid; }
+.drop-zone.correct { border-color: var(--c-good); background: #eefaf1; }
+.drop-zone.wrong { border-color: var(--c-bad); background: #fdeeec; }
+.drop-zone .slot { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* 點擊探索 */
+.explore-map { position: relative; }
+.hotspot { cursor: pointer; transition: transform .15s; }
+.hotspot:hover { transform: scale(1.04); }
+.hotspot.selected { filter: drop-shadow(0 0 6px var(--c-accent-2)); }
+
+/* 水質前後切換 */
+.compare-toggle { display: flex; gap: 8px; margin: 14px 0; }
+.compare-stage[hidden] { display: none !important; }
+
+/* 尊重減少動畫偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .water-plant, .energy-arrow.flowing { animation: none !important; }
+  html { scroll-behavior: auto; }
+}

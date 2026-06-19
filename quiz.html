@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>闖關大挑戰 · 水域環境探索趣</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="quiz">
+  <header data-chrome="header"></header>
+  <main>
+    <div class="container">
+      <h1 class="page-title">🏆 <span id="quiz-title">闖關大挑戰</span></h1>
+      <p class="page-lead">把每一關都答完，按「交卷」看看你得幾分！題目都來自前面學過的內容。</p>
+
+      <div class="feedback no" id="quiz-warn" hidden></div>
+      <div id="quiz-list"></div>
+
+      <div class="quiz-actions">
+        <button type="button" class="btn accent" id="quiz-submit">📝 交卷看結果</button>
+      </div>
+
+      <div class="card center" id="quiz-result" hidden></div>
+
+      <nav data-chrome="pager"></nav>
+    </div>
+  </main>
+  <footer data-chrome="footer"></footer>
+  <script type="module" src="js/quiz.js"></script>
+</body>
+</html>

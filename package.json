@@ -1,0 +1,15 @@
+{
+  "name": "aquatic-habitat-interactive-learning",
+  "version": "0.1.0",
+  "description": "水域環境探索趣 — 國小高年級自然科學互動數位教材",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "license": "CC-BY-4.0",
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

@@ -1,0 +1,26 @@
+/* ===== 響應式（RWD） ===== */
+
+@media (max-width: 860px) {
+  :root { --fs-base: 17px; }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .site-header h1 { font-size: 1.3rem; }
+}
+
+@media (max-width: 600px) {
+  :root { --fs-base: 16px; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .drop-zones { grid-template-columns: 1fr; }
+  .page-title { font-size: 1.35rem; }
+  .card { padding: 16px; }
+  .pager { flex-direction: column; }
+  .pager a { max-width: 100%; }
+  .stage-flow { flex-direction: column; }
+  .stage-arrow { transform: rotate(90deg); padding: 2px 0; }
+  .stage-step { min-width: 0; }
+  .site-header .head-top { gap: 8px; }
+  .tabs a { padding: 9px 13px; font-size: .95rem; }
+}
+
+@media (max-width: 380px) {
+  .btn { padding: 11px 16px; font-size: .95rem; }
+}

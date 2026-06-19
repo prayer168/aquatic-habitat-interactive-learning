@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>水域環境探索趣 · 學習任務</title>
+  <meta name="description" content="國小高年級自然科學互動教材：認識水域環境、水生植物、水生動物與珍惜水域。">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="home">
+  <header data-chrome="header"></header>
+  <main>
+    <div class="container">
+      <h1 class="page-title">🌊 歡迎來到水域環境探索趣</h1>
+      <p class="page-lead" id="intro"></p>
+
+      <div class="card home-progress">
+        <h2>我的學習進度</h2>
+        <div class="progress-box">
+          <div class="progress-track"><div class="progress-fill" id="home-progress-fill"></div></div>
+          <p class="progress-label" id="home-progress-label" style="color:var(--c-muted)"></p>
+        </div>
+        <a class="btn accent" href="know.html">開始學習 →</a>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h2>🎯 學習目標</h2>
+          <ul id="goals"></ul>
+        </div>
+        <div class="card">
+          <h2>🧭 先備知識</h2>
+          <ul id="prior"></ul>
+          <h3>⏱ 預估時間</h3>
+          <p id="duration"></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>📌 怎麼使用這份教材</h2>
+        <p>依照上方頁籤的順序學習：<strong>認識水域 → 水生植物 → 水生動物 → 珍惜水域</strong>，每一頁都有互動可以玩，最後到「闖關大挑戰」測試自己，再到「自主學習」延伸探索。電腦上也可以用鍵盤 ← → 切換頁面。</p>
+      </div>
+
+      <nav data-chrome="pager"></nav>
+    </div>
+  </main>
+  <footer data-chrome="footer"></footer>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

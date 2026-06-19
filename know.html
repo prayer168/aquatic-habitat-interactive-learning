@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>認識水域環境 · 水域環境探索趣</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="know">
+  <header data-chrome="header"></header>
+  <main>
+    <div class="container">
+      <h1 class="page-title">🌊 認識水域環境</h1>
+      <p class="page-lead" id="know-lead"></p>
+
+      <div class="card">
+        <span class="section-flag">點擊探索</span>
+        <h2>水域地圖：點點看每個水域的分類</h2>
+        <p class="muted">點選地圖上的「池塘、湖泊、溪流、海洋」，看看它是淡水還是海水、靜水還是流水。</p>
+        <div class="stage-svg-wrap" id="water-map"></div>
+        <div class="feedback hint" id="map-info">點選地圖上的任一水域，看看它的分類與特徵。</div>
+        <div class="anim-controls">
+          <button type="button" class="btn secondary" id="map-reset">🔄 重設</button>
+        </div>
+      </div>
+
+      <h2 class="page-title" style="font-size:1.25rem">四種水域分類</h2>
+      <div class="grid grid-2" id="know-sections"></div>
+
+      <div class="card">
+        <h2>💡 想一想</h2>
+        <p id="know-note"></p>
+        <p class="muted">思考問題：你家附近有哪些水域？它們屬於哪一種分類呢？</p>
+      </div>
+
+      <nav data-chrome="pager"></nav>
+    </div>
+  </main>
+  <footer data-chrome="footer"></footer>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>水生植物 · 水域環境探索趣</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="plants">
+  <header data-chrome="header"></header>
+  <main>
+    <div class="container">
+      <h1 class="page-title">🌿 水生植物</h1>
+      <p class="page-lead" id="plants-lead"></p>
+
+      <h2 class="page-title" style="font-size:1.25rem">四類水生植物（看圖比一比）</h2>
+      <div class="grid grid-2" id="plants-types"></div>
+
+      <div class="card">
+        <h2>🌱 水生植物的角色</h2>
+        <p id="plants-role"></p>
+      </div>
+
+      <div class="card" id="match-area">
+        <span class="section-flag">拖曳配對</span>
+        <h2>把植物放到正確的類別</h2>
+        <p class="muted">電腦：直接拖曳植物到對應的框。手機／平板：先點植物，再點正確的類別框。</p>
+        <div class="drag-area">
+          <div class="drag-pool" id="match-pool" aria-label="待配對的植物"></div>
+          <div class="drop-zones" id="match-zones"></div>
+        </div>
+        <div class="anim-controls">
+          <button type="button" class="btn" id="match-check">✅ 檢查答案</button>
+          <button type="button" class="btn secondary" id="match-reset">🔄 重設</button>
+        </div>
+        <div class="feedback hint" id="match-feedback">把四種植物拖到正確的類別吧！</div>
+      </div>
+
+      <nav data-chrome="pager"></nav>
+    </div>
+  </main>
+  <footer data-chrome="footer"></footer>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

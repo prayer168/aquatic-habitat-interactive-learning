@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>珍惜水域環境 · 水域環境探索趣</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="cherish">
+  <header data-chrome="header"></header>
+  <main>
+    <div class="container">
+      <h1 class="page-title">💧 珍惜水域環境</h1>
+      <p class="page-lead" id="cherish-lead"></p>
+
+      <div class="card">
+        <span class="section-flag">切換比較</span>
+        <h2 id="compare-title"></h2>
+        <p class="muted">按下方按鈕，比較水域「乾淨」與「受汙染」的差別。</p>
+        <div class="stage-svg-wrap" id="compare-svg"></div>
+        <div class="compare-toggle" id="compare-toggle">
+          <button type="button" class="btn" data-state="clean">🌿 乾淨的水域</button>
+          <button type="button" class="btn" data-state="dirty">🗑 受汙染的水域</button>
+        </div>
+        <div class="feedback ok" id="compare-desc"></div>
+        <h3>水域汙染常見原因</h3>
+        <div id="causes"></div>
+      </div>
+
+      <div class="card">
+        <h2>🙌 我可以做的事</h2>
+        <ul id="actions"></ul>
+        <p class="muted">思考問題：這個星期，你願意先從哪一件事開始做起？</p>
+      </div>
+
+      <nav data-chrome="pager"></nav>
+    </div>
+  </main>
+  <footer data-chrome="footer"></footer>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

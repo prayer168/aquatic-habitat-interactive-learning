@@ -1,0 +1,68 @@
+{
+  "resources": [
+    {
+      "title": "教育部數位教學資源網",
+      "url": "https://market.cloud.edu.tw/",
+      "type": "教學資源",
+      "grade": "國小高年級",
+      "description": "搜尋『水域生態』『水生植物』等關鍵字，可找到教師分享的教案、簡報與學習單。",
+      "checkedAt": "2026-06-19"
+    },
+    {
+      "title": "行政院農業部 — 特有生物研究保育中心",
+      "url": "https://www.tesri.gov.tw/",
+      "type": "研究機構",
+      "grade": "國小高年級",
+      "description": "認識台灣的淡水魚、水生植物與濕地生態，了解保育工作。",
+      "checkedAt": "2026-06-19"
+    },
+    {
+      "title": "國立海洋科技博物館",
+      "url": "https://www.nmmst.gov.tw/",
+      "type": "博物館",
+      "grade": "國小高年級",
+      "description": "海洋生態與水域環境的展示與線上資源，認識海水水域生物。",
+      "checkedAt": "2026-06-19"
+    },
+    {
+      "title": "國立自然科學博物館",
+      "url": "https://www.nmns.edu.tw/",
+      "type": "博物館",
+      "grade": "國小高年級",
+      "description": "提供生態與生物多樣性主題展示與教育資源，可延伸學習水域生物。",
+      "checkedAt": "2026-06-19"
+    },
+    {
+      "title": "行政院環境部 — 水質保護",
+      "url": "https://www.moenv.gov.tw/",
+      "type": "政府網站",
+      "grade": "國小高年級",
+      "description": "了解水汙染的成因、河川水質監測與政府的水域保護措施。",
+      "checkedAt": "2026-06-19"
+    },
+    {
+      "title": "公視 — 我們的島",
+      "url": "https://ourisland.pts.org.tw/",
+      "type": "公共媒體",
+      "grade": "國小高年級（建議教師選讀）",
+      "description": "公共電視的環境紀錄節目，有許多河川、濕地與海洋保育的真實故事。",
+      "checkedAt": "2026-06-19"
+    },
+    {
+      "title": "台北市立動物園 — 兩棲爬蟲動物館",
+      "url": "https://www.zoo.gov.taipei/",
+      "type": "教育機構",
+      "grade": "國小高年級",
+      "description": "認識青蛙等兩棲動物與水域的關係，了解牠們的生活環境。",
+      "checkedAt": "2026-06-19"
+    },
+    {
+      "title": "農業部林業及自然保育署 — 國家濕地",
+      "url": "https://www.forest.gov.tw/",
+      "type": "政府網站",
+      "grade": "國小高年級",
+      "description": "認識台灣重要濕地與其中的水生動植物，了解濕地的功能與保育。",
+      "checkedAt": "2026-06-19"
+    }
+  ]
+}
